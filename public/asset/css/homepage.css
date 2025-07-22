@@ -1,0 +1,127 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: #0d1b2a;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    background-color: #0d1b2a;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1rem;
+}
+
+.container {
+    background-color: #ffffffee;
+    color: #1a1a1a;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    padding: 2rem;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 0.2rem;
+    font-size: 1.8rem;
+    color: #0d1b2a;
+}
+
+p.sub {
+    font-size: 1rem;
+    color: #3a3a3a;
+    margin-bottom: 2rem;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 1.2rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.btn-cek {
+    width: 100%;
+    padding: 12px;
+    background-color: #ffc300;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #0d1b2a;
+    transition: background-color 0.3s ease;
+}
+
+.btn-cek:hover {
+    background-color: #e6b100;
+}
+
+.btn-login {
+    margin-top: 2rem;
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background-color: #003566;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-login:hover {
+    background-color: #001d3d;
+}
+
+.text-navy {
+    color: #002b5b;
+    /* atau navy lebih gelap: #002B5B */
+}
+
+.message {
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.success {
+    color: green;
+}
+
+.error {
+    color: red;
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    p.sub {
+        font-size: 0.95rem;
+    }
+}
