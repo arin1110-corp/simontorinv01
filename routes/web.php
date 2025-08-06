@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
-    return view('sadarin2');
+    return view('homepage');
 });
 
 Route::get('/login/admin', function () {
