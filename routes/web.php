@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 Route::get('/', function () {
     return view('homepage');
 });
+Route::get('/login/nipnik', function () {
+    return view('loginnipnik');
+})->name('login.nipnik');
 
 Route::get('/login/admin', function () {
     return view('loginadmin');
