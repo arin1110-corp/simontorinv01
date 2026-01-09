@@ -100,7 +100,7 @@
 
     <div class="container-box">
 
-        <h5><img src="{{asset('asset/image/pemprov.png')}}" width="230"></h5>
+        <h5><img src="{{asset('asset/image/pemprov.png')}}" width="170"></h5>
 
         <div class="title-main">SIMONTOR<span>IN</span></div>
         <div class="subtitle">Sistem Informasi Monitoring Aset Internal</div>
