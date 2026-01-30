@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
-    return view('home.index');
+    return view('home.simontorin');
 });
 Route::get('/login/nipnik', function () {
     return view('loginnipnik');
