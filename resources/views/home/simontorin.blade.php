@@ -31,23 +31,10 @@
             padding: 50px;
         }
 
-        .side-info h2 {
-            font-weight: 800;
-            letter-spacing: 1px;
-        }
-
-        .side-info p {
-            opacity: .85;
-            margin-top: 10px;
-        }
-
         .content {
             padding: 50px;
-        }
-
-        .content h5 {
-            font-weight: 700;
-            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
         }
 
         .input-lg {
@@ -64,13 +51,40 @@
             border-left: 4px solid #198754;
             border-radius: 12px;
             padding: 20px;
-            margin-top: 25px;
+            margin-top: 20px;
+            flex-grow: 1;
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 25px 20px;
+            color: #6b7280;
+        }
+
+        .empty-state i {
+            font-size: 42px;
+            color: #94a3b8;
+        }
+
+        /* SCROLL 5 BARIS */
+        .result-scroll {
+            max-height: 260px;
+            overflow-y: auto;
+        }
+
+        .result-scroll thead th {
+            position: sticky;
+            top: 0;
+            background: #f8fafc;
+            z-index: 2;
         }
 
         footer {
-            font-size: 13px;
+            font-size: 18px;
             color: #666;
-            margin-top: 40px;
+            margin-top: 20px;
+            text-align: center;
         }
     </style>
 </head>
@@ -79,44 +93,54 @@
 
     <div class="card-main row g-0">
 
-        <!-- LEFT INFO -->
+        <!-- LEFT -->
         <div class="col-lg-4 side-info">
-            <img src="{{ asset('asset/image/pemprov.png') }} " width="100" class="mb-4">
-            <h2>SIMONTOR<span style="color:#b0ec09;font-weight:800">IN</span></h2>
-            <p>
-                Sistem Monitoring Inventaris Barang Internal
-                Dinas Kebudayaan Provinsi Bali
-            </p>
+            <img src="{{ asset('asset/image/pemprov.png') }}" width="90" class="mb-4">
+            <h2>SIMONTOR<span style="color:#b0ec09">IN</span></h2>
+            <p>Sistem Monitoring Inventaris Barang Internal<br>
+                Dinas Kebudayaan Provinsi Bali</p>
 
             <hr class="opacity-25">
 
-            <p class="small">
-                Akses cepat untuk pengecekan kondisi, lokasi,
-                dan status barang inventaris secara real-time.
-            </p>
+            <h5 class="mt-4"><i class="bi bi-shield-lock"></i> Login Pegawai</h5>
+
+            <div class="mb-2">
+                <label class="form-label small">NIP / Username</label>
+                <input type="text" class="form-control input-lg"
+                    placeholder="Masukkan NIP atau Username">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label small">Password</label>
+                <input type="password" class="form-control input-lg"
+                    placeholder="Password">
+            </div>
+
+            <button class="btn btn-success btn-lg w-100">
+                <i class="bi bi-box-arrow-in-right"></i> Login
+            </button>
         </div>
 
-        <!-- RIGHT CONTENT -->
+        <!-- RIGHT -->
         <div class="col-lg-8 content">
 
-            <!-- CEK BARANG -->
             <h5><i class="bi bi-search"></i> Cek Inventaris</h5>
 
-            <form method="POST" action="#">
-                @csrf
+            <form>
                 <div class="row mb-3">
                     <div class="col-md-7">
-                        <input type="text" name="kode_barang" class="form-control input-lg"
-                            placeholder="Masukkan Kata Kunci Pencarian (Kode Barang / Nama Barang)">
+                        <input type="text" class="form-control input-lg"
+                            placeholder="Masukkan kata kunci (Kode / Nama Barang)">
                     </div>
+
                     <div class="col-md-3 d-grid">
                         <button class="btn btn-success btn-lg">
-                            <i class="bi bi-search"></i> Cek
+                            <i class="bi bi-search"></i> Cari
                         </button>
                     </div>
+
                     <div class="col-md-2 d-grid">
-                        <button type="button" class="btn btn-outline-primary btn-lg" data-bs-toggle="modal"
-                            data-bs-target="#modalScan">
+                        <button type="button" class="btn btn-outline-primary btn-lg">
                             <i class="bi bi-upc-scan"></i>
                         </button>
                     </div>
@@ -125,40 +149,44 @@
 
             <!-- RESULT -->
             <div class="result">
-                <div class="fw-semibold mb-2 text-success">
-                    Barang ditemukan
+
+                <!-- EMPTY STATE -->
+                <div class="empty-state">
+                    <i class="bi bi-search"></i>
+                    <p class="mt-2 mb-1 fw-semibold">Belum ada hasil pencarian</p>
+                    <small>Masukkan kode atau nama barang untuk menampilkan data inventaris</small>
                 </div>
-                <div class="row small">
-                    <div class="col-md-6">
-                        <strong>Nama</strong><br>Laptop Dell Latitude<br><br>
-                        <strong>Lokasi</strong><br>Ruang Sekretariat
+
+                <!-- HASIL (aktifkan saat ada data)
+                <div>
+                    <div class="fw-semibold mb-3 text-success">
+                        Hasil Pencarian (menampilkan 5 data)
                     </div>
-                    <div class="col-md-6">
-                        <strong>Kondisi</strong><br>
-                        <span class="badge bg-success">Baik</span><br><br>
-                        <strong>Status</strong><br>Digunakan
+
+                    <div class="table-responsive result-scroll">
+                        <table class="table table-sm align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Kode</th>
+                                    <th>Nama Barang</th>
+                                    <th>Lokasi</th>
+                                    <th>Kondisi</th>
+                                    <th>Status</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- data -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-            </div>
-
-            <hr class="my-4">
-
-            <!-- LOGIN -->
-            <h5><i class="bi bi-shield-lock"></i> LOGIN</h5>
-            <div class="row">
-                <div class="col-md-6">
-                    <input class="form-control input-lg mb-2" placeholder="Masukan NIP / NIP">
-                    <button class="btn btn-outline-dark btn-lg w-100">
-                        LOGIN
-                    </button>
-                </div>
             </div>
 
             <footer>
-                © {{ date('Y') }} Dinas Kebudayaan Provinsi Bali — SIMONTORIN
+                © {{ date('Y') }} Dinas Kebudayaan Provinsi Bali — SIMONTOR<span style="color:#12007a">IN</span>
             </footer>
-
         </div>
     </div>
 
