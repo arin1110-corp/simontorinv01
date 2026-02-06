@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 Route::get('/', function () {
     return view('home.simontorin');
 });
-Route::get('/login/nipnik', function () {
-    return view('loginnipnik');
+Route::get('/admin', function () {
+    return view('admin.admin_simontorin');
 })->name('login.nipnik');
 
 Route::get('/login/admin', function () {
