@@ -1,23 +1,18 @@
+<!-- Sidebar -->
 <div class="sidebar">
-    <img src="{{ asset('asset/image/pemprov.png') }}" width="80" class="mb-4">
-    <h4>SIMONTOR<span style="color:#b0ec09">IN</span></h4>
-    <small>Dinas Kebudayaan Provinsi Bali</small>
+    <div class="logo">
+        <img src="{{ asset('asset/image/pemprov.png') }}" alt="Pemprov Logo">
+        <h2>SIMONTORIN</h2>
+    </div>
 
-    <hr class="opacity-25">
-
-    <a href="#" class="active">
-        <i class="bi bi-speedometer2"></i> Dashboard
-    </a>
-    <a href="#">
-        <i class="bi bi-box-seam"></i> Inventaris
-    </a>
-    <a href="#">
-        <i class="bi bi-file-earmark-text"></i> Laporan
-    </a>
-
-    <hr class="opacity-25">
-
-    <a href="#" class="text-danger">
+    <a href="{{ route('admin.dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a>
+    <a href="{{ route('admin.inventaris.index') }}"><i class="bi bi-box-seam"></i> Inventaris</a>
+    <a href="{{ route('admin.perbaikan.index') }}"><i class="bi bi-tools"></i> Perbaikan</a>
+    <a href="{{ route('admin.peminjaman.index') }}"><i class="bi bi-arrow-left-right"></i> Peminjaman</a>
+    <a href="{{ route('admin.booking.index') }}"><i class="bi bi-calendar-check"></i> Booking Rapat</a>
+    <a href="{{ route('admin.users.index') }}"><i class="bi bi-people"></i> Pengguna</a>
+    <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
         <i class="bi bi-box-arrow-right"></i> Logout
     </a>
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
 </div>

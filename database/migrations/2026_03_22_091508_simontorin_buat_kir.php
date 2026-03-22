@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -14,10 +13,15 @@ return new class extends Migration
     public function up()
     {
         //
-        Schema::create('simontorin_jenisinventaris', function (Blueprint $table) {
-            $table->increments('jenisinventaris_id');
-            $table->string('jenisinventaris_nama', 150);
-            $table->string('jenisinventaris_status', 50);
+        Schema::create('simontorin_kir', function (Blueprint $table) {
+            $table->id('kir_id');
+
+            $table->unsignedBigInteger('kir_lokasi');
+
+            $table->string('kir_kode', 50);
+            $table->year('kir_tahun');
+
+            $table->timestamps();
         });
     }
 
@@ -29,5 +33,6 @@ return new class extends Migration
     public function down()
     {
         //
+        Schema::dropIfExists('simontorin_kir');
     }
 };

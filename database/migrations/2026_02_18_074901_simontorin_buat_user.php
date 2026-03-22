@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -14,14 +13,13 @@ return new class extends Migration
     public function up()
     {
         //
-        Schema::create('simontorin_user', function (Blueprint $table) {
-            $table->increments('user_id');
-            $table->string('user_kodesync', 255)->unique();
-            $table->string('user_nip', 255);
-            $table->string('user_nik', 255);
-            $table->string('user_nama', 255);
-            $table->string('user_email', 255)->unique();
-            $table->string('user_password', 255);
+        Schema::create('simontorin_user_role', function (Blueprint $table) {
+            $table->id('user_role_id');
+
+            $table->unsignedBigInteger('user_role_user'); // dari SADARIN
+
+            $table->enum('user_role_nama', ['admin', 'user'])->default('user');
+
             $table->timestamps();
         });
     }
@@ -33,6 +31,7 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        // 
+        Schema::dropIfExists('simontorin_user_role');
     }
 };

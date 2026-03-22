@@ -2,264 +2,205 @@
 <html lang="id">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Dashboard Admin - SIMONTORIN</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @include('admin.partials.headeradmin')
 
-    <link rel="icon" href="{{ asset('asset/image/pemprov.png') }}">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-
-    <style>
-        body {
-            background: #f2f4f7;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        .sidebar {
-            width: 260px;
-            min-height: 100vh;
-            background: #201603;
-            color: #fff;
-            position: fixed;
-            padding: 25px;
-        }
-
-        .sidebar a {
-            color: #fff;
-            text-decoration: none;
-            display: block;
-            padding: 10px 12px;
-            border-radius: 8px;
-            margin-bottom: 6px;
-        }
-
-        .sidebar a.active,
-        .sidebar a:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .main {
-            margin-left: 260px;
-            padding: 30px;
-        }
-
-        .card {
-            border-radius: 18px;
-            box-shadow: 0 12px 28px rgba(0, 0, 0, .08);
-        }
-
-        .stat-icon {
-            width: 55px;
-            height: 55px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            color: #fff;
-        }
-    </style>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 </head>
 
 <body>
 
-    <!-- SIDEBAR -->
+    <!-- Sidebar -->
     @include('admin.partials.sidebaradmin')
 
-    <!-- MAIN -->
-    <div class="main">
+    <!-- Content -->
+    <div class="content">
+        <div class="container-fluid">
 
-        <h4 class="fw-bold mb-4">
-            Dashboard
-        </h4>
-
-        <!-- STAT BOX -->
-        <div class="row g-4 mb-4">
-
-            <div class="col-md-3">
-                <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                        <div class="stat-icon bg-primary">
-                            <i class="bi bi-box"></i>
+            <!-- Statistik Cards -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="card card-stat p-3 text-white"
+                        style="background: linear-gradient(135deg,#22c55e,#16a34a);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="card-header">Total Inventaris</div>
+                                <h3 class="mt-2">{{ $stats['inventaris'] ?? 0 }}</h3>
+                            </div>
+                            <i class="bi bi-box-seam stat-icon"></i>
                         </div>
-                        <div class="ms-3">
-                            <small>Total Inventaris</small>
-                            <h4 class="fw-bold mb-0">245</h4>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-stat p-3 text-white"
+                        style="background: linear-gradient(135deg,#3b82f6,#2563eb);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="card-header">Perbaikan Aktif</div>
+                                <h3 class="mt-2">{{ $stats['perbaikan'] ?? 0 }}</h3>
+                            </div>
+                            <i class="bi bi-tools stat-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-stat p-3 text-white"
+                        style="background: linear-gradient(135deg,#f59e0b,#d97706);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="card-header">Peminjaman Aktif</div>
+                                <h3 class="mt-2">{{ $stats['peminjaman'] ?? 0 }}</h3>
+                            </div>
+                            <i class="bi bi-arrow-left-right stat-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-stat p-3 text-white"
+                        style="background: linear-gradient(135deg,#ec4899,#db2777);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="card-header">Booking Rapat</div>
+                                <h3 class="mt-2">{{ $stats['booking'] ?? 0 }}</h3>
+                            </div>
+                            <i class="bi bi-calendar-check stat-icon"></i>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                        <div class="stat-icon bg-success">
-                            <i class="bi bi-check-circle"></i>
-                        </div>
-                        <div class="ms-3">
-                            <small>Digunakan</small>
-                            <h4 class="fw-bold mb-0">180</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                        <div class="stat-icon bg-warning text-dark">
-                            <i class="bi bi-tools"></i>
-                        </div>
-                        <div class="ms-3">
-                            <small>Perbaikan</small>
-                            <h4 class="fw-bold mb-0">25</h4>
+            <!-- Row 2 -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <div class="card card-stat p-3 text-white"
+                        style="background: linear-gradient(135deg,#8b5cf6,#7c3aed);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="card-header">Inventaris Aktif</div>
+                                <h3 class="mt-2">{{ $stats['inventaris'] ?? 0 }}</h3>
+                            </div>
+                            <i class="bi bi-box-seam stat-icon"></i>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                        <div class="stat-icon bg-secondary">
-                            <i class="bi bi-archive"></i>
-                        </div>
-                        <div class="ms-3">
-                            <small>Tersedia</small>
-                            <h4 class="fw-bold mb-0">40</h4>
+                <div class="col-md-6">
+                    <div class="card card-stat p-3 text-white"
+                        style="background: linear-gradient(135deg,#b50505,#680668);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="card-header">Inventaris Dihapus</div>
+                                <h3 class="mt-2">{{ $stats['inventaris'] ?? 0 }}</h3>
+                            </div>
+                            <i class="bi bi-trash stat-icon"></i>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>  
 
-        </div>
-
-         <!-- STAT BOX -->
-        <div class="row g-4 mb-4">
-
-            <div class="col-md-3">
-                <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                        <div class="stat-icon bg-primary">
-                            <i class="bi bi-box"></i>
-                        </div>
-                        <div class="ms-3">
-                            <small>Total Inventaris</small>
-                            <h4 class="fw-bold mb-0">245</h4>
-                        </div>
-                    </div>
+            <!-- Tabel Inventaris Terbaru -->
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <i class="bi bi-box-seam"></i> Inventaris Terbaru
+                </div>
+                <div class="card-body table-responsive">
+                    <table id="inventarisTable" class="table table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>Kode</th>
+                                <th>Nama</th>
+                                <th>Kondisi</th>
+                                <th>Status</th>
+                                <th>Tahun</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($latestInventaris as $inv)
+                                <tr>
+                                    <td>{{ $inv->inventaris_kode }}</td>
+                                    <td>{{ $inv->inventaris_nama }}</td>
+                                    <td>{{ $inv->inventaris_kondisi }}</td>
+                                    <td>{{ $inv->inventaris_status }}</td>
+                                    <td>{{ $inv->inventaris_tahun_perolehan ?? '-' }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                        <div class="stat-icon bg-success">
-                            <i class="bi bi-check-circle"></i>
-                        </div>
-                        <div class="ms-3">
-                            <small>Digunakan</small>
-                            <h4 class="fw-bold mb-0">180</h4>
-                        </div>
-                    </div>
+            <!-- Tabel Perbaikan Aktif -->
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <i class="bi bi-tools"></i> Perbaikan Aktif
                 </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                        <div class="stat-icon bg-warning text-dark">
-                            <i class="bi bi-tools"></i>
-                        </div>
-                        <div class="ms-3">
-                            <small>Perbaikan</small>
-                            <h4 class="fw-bold mb-0">25</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                        <div class="stat-icon bg-secondary">
-                            <i class="bi bi-archive"></i>
-                        </div>
-                        <div class="ms-3">
-                            <small>Tersedia</small>
-                            <h4 class="fw-bold mb-0">40</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <!-- STAT BOX -->
-        <div class="row g-4 mb-4">
-
-            <div class="col-md-3">
-                <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                        <div class="stat-icon bg-primary">
-                            <i class="bi bi-box"></i>
-                        </div>
-                        <div class="ms-3">
-                            <small>Total Inventaris</small>
-                            <h4 class="fw-bold mb-0">245</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                        <div class="stat-icon bg-success">
-                            <i class="bi bi-check-circle"></i>
-                        </div>
-                        <div class="ms-3">
-                            <small>Digunakan</small>
-                            <h4 class="fw-bold mb-0">180</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                        <div class="stat-icon bg-warning text-dark">
-                            <i class="bi bi-tools"></i>
-                        </div>
-                        <div class="ms-3">
-                            <small>Perbaikan</small>
-                            <h4 class="fw-bold mb-0">25</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                        <div class="stat-icon bg-secondary">
-                            <i class="bi bi-archive"></i>
-                        </div>
-                        <div class="ms-3">
-                            <small>Tersedia</small>
-                            <h4 class="fw-bold mb-0">40</h4>
-                        </div>
-                    </div>
+                <div class="card-body table-responsive">
+                    <table id="perbaikanTable" class="table table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>Barang</th>
+                                <th>Tanggal Masuk</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($activePerbaikan as $p)
+                                <tr>
+                                    <td>{{ $p->inventaris->inventaris_nama ?? '-' }}</td>
+                                    <td>{{ $p->perbaikan_tanggal_masuk }}</td>
+                                    <td>{{ $p->perbaikan_status }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
         </div>
 
+        <!-- Footer -->
+        @include('admin.partials.footeradmin')
     </div>
 
+    <!-- jQuery (wajib sebelum DataTables) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#inventarisTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "lengthChange": true,
+                "deferRender": true,
+                "autoWidth": false,
+                "language": {
+                    "emptyTable": "Belum ada data inventaris"
+                }
+            });
+
+            $('#perbaikanTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "lengthChange": true,
+                "deferRender": true,
+                "autoWidth": false,
+                "language": {
+                    "emptyTable": "Tidak ada perbaikan aktif"
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>

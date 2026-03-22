@@ -1,0 +1,157 @@
+body {
+font-family: 'Segoe UI', sans-serif;
+background: #f4f6f9;
+margin: 0;
+}
+
+/* Sidebar */
+.sidebar {
+width: 260px;
+height: 100vh;
+position: fixed;
+background: #1e293b; /* navy gelap solid */
+color: #fff;
+padding-top: 30px;
+box-shadow: 5px 0 20px rgba(0,0,0,0.2); /* subtle depth */
+}
+
+.sidebar .logo {
+display: flex;
+flex-direction: column;
+align-items: center;
+margin-bottom: 40px;
+}
+
+.sidebar .logo img {
+width: 100px;
+border-radius: 10px;
+margin-bottom: 10px;
+box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* 3D effect */
+}
+
+.sidebar h2 {
+font-weight: 700;
+font-size: 1.5rem;
+}
+
+.sidebar a {
+display: block;
+color: #fff;
+padding: 14px 20px;
+text-decoration: none;
+border-radius: 10px;
+margin: 5px 10px;
+transition: all 0.3s ease;
+box-shadow: inset 0 0 0 rgba(0,0,0,0); /* initial inset shadow */
+}
+
+.sidebar a i {
+margin-right: 10px;
+font-size: 1.2rem;
+}
+
+/* Hover effect modern 3D */
+.sidebar a:hover {
+background: #334155; /* sedikit lebih terang */
+transform: translateX(8px) scale(1.02);
+box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Content area */
+.content {
+margin-left: 260px;
+padding: 30px;
+}
+
+/* Statistik Cards modern */
+.card-stat {
+border-radius: 20px;
+box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+transition: transform 0.3s, box-shadow 0.3s;
+background: #fff; /* flat white modern look */
+}
+
+.card-stat:hover {
+transform: translateY(-6px);
+box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+font-weight: 600;
+font-size: 1rem;
+}
+
+.stat-icon {
+font-size: 2.5rem;
+opacity: 0.2;
+}
+
+/* Card Inventaris modern */
+/* warna card */
+.bg-green { background: linear-gradient(135deg,#22c55e,#16a34a); }
+.bg-blue { background: linear-gradient(135deg,#3b82f6,#2563eb); }
+.bg-yellow { background: linear-gradient(135deg,#f59e0b,#d97706); }
+.bg-red { background: linear-gradient(135deg,#ef4444,#dc2626); }
+
+/* kategori card */
+.kategori-card {
+    padding: 20px;
+    border-radius: 15px;
+    background: #f8fafc;
+    text-align: center;
+    transition: 0.3s;
+}
+.kategori-card:hover {
+    transform: translateY(-5px);
+}
+
+/* badge status */
+.badge-status {
+    padding: 6px 10px;
+    border-radius: 8px;
+}
+
+.badge-aktif { background:#dcfce7; color:#16a34a; }
+.badge-perbaikan { background:#fef3c7; color:#d97706; }
+.badge-dihapus { background:#fee2e2; color:#dc2626; }
+
+/* table lebih clean */
+.table {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Table modern */
+.table {
+background: #fff;
+border-radius: 12px;
+overflow: hidden;
+box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.table thead {
+background: #e2e8f0;
+font-weight: 600;
+}
+
+.table-hover tbody tr:hover {
+background: #f1f5f9;
+transform: scale(1.01);
+transition: all 0.2s ease;
+}
+
+/* Responsive */
+@media(max-width:768px) {
+.sidebar {
+width: 100%;
+height: auto;
+position: relative;
+border-radius: 0;
+box-shadow: none;
+}
+
+.content {
+margin-left: 0;
+margin-top: 20px;
+}
+}

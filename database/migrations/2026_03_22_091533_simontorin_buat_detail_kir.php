@@ -13,13 +13,14 @@ return new class extends Migration {
     public function up()
     {
         //
-        Schema::create('simontorin_inventaris_detail', function (Blueprint $table) {
-            $table->id('inventaris_detail_id');
+        Schema::create('simontorin_kir_detail', function (Blueprint $table) {
+            $table->id('kir_detail_id');
 
-            $table->unsignedBigInteger('inventaris_detail_inventaris');
+            $table->unsignedBigInteger('kir_detail_kir'); // dari simontorin_kir
 
-            $table->string('detail_nama');
-            $table->text('detail_isi');
+            $table->unsignedBigInteger('kir_detail_inventaris'); // dari simontorin_inventaris
+
+            $table->integer('kir_detail_jumlah')->default(1);
 
             $table->timestamps();
         });
@@ -32,6 +33,7 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('simontorin_inventaris_detail');
+        //
+        Schema::dropIfExists('simontorin_kir_detail');
     }
 };

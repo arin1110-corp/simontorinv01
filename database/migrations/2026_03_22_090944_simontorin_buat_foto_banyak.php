@@ -14,6 +14,15 @@ return new class extends Migration
     public function up()
     {
         //
+        Schema::create('simontorin_foto', function (Blueprint $table) {
+            $table->id('foto_id');
+
+            $table->unsignedBigInteger('foto_inventaris');
+
+            $table->text('foto_path');
+
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('simontorin_foto');
     }
 };
