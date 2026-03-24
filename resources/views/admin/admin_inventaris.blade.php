@@ -18,30 +18,54 @@
             <div class="row g-4 mb-4">
 
                 <div class="col-md-3">
-                    <div class="card card-stat p-3 text-white bg-green">
-                        <h6>Total Inventaris</h6>
-                        <h3>{{ $stats['total'] }}</h3>
+                    <div class="card card-stat p-3 text-white"
+                        style="background: linear-gradient(135deg,#f59e0b,#d97706);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="card-header">Total Inventaris</div>
+                                <h3 class="mt-2">{{ $stats['total'] ?? 0 }}</h3>
+                            </div>
+                            <i class="bi bi-arrow-left-right stat-icon"></i>
+                        </div>
                     </div>
                 </div>
 
                 <div class="col-md-3">
-                    <div class="card card-stat p-3 text-white bg-blue">
-                        <h6>Aktif</h6>
-                        <h3>{{ $stats['aktif'] }}</h3>
+                    <div class="card card-stat p-3 text-white"
+                        style="background: linear-gradient(135deg,#22c55e,#16a34a);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="card-header">Inventaris Tersedia</div>
+                                <h3 class="mt-2">{{ $stats['tersedia'] ?? 0 }}</h3>
+                            </div>
+                            <i class="bi bi-box-seam stat-icon"></i>
+                        </div>
                     </div>
                 </div>
 
                 <div class="col-md-3">
-                    <div class="card card-stat p-3 text-white bg-yellow">
-                        <h6>Perbaikan</h6>
-                        <h3>{{ $stats['perbaikan'] }}</h3>
+                    <div class="card card-stat p-3 text-white"
+                        style="background: linear-gradient(135deg,#a3cf05,#a1a900);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="card-header">Perbaikan</div>
+                                <h3 class="mt-2">{{ $stats['perbaikan'] ?? 0 }}</h3>
+                            </div>
+                            <i class="bi bi-tools stat-icon"></i>
+                        </div>
                     </div>
                 </div>
 
                 <div class="col-md-3">
-                    <div class="card card-stat p-3 text-white bg-red">
-                        <h6>Dihapus</h6>
-                        <h3>{{ $stats['dihapus'] }}</h3>
+                    <div class="card card-stat p-3 text-white"
+                        style="background: linear-gradient(135deg,#b50505,#680668);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="card-header">Inventaris Dihapus</div>
+                                <h3 class="mt-2">{{ $stats['dihapus'] ?? 0 }}</h3>
+                            </div>
+                            <i class="bi bi-trash stat-icon"></i>
+                        </div>
                     </div>
                 </div>
 
@@ -124,6 +148,35 @@
             </div>
 
 
+            <!-- 🔷 STATISTIK KATEGORI -->
+            <div class="row g-3 mb-4 align-items-center">
+                <div class="col-md-6 align-items-center">
+                    <div class="card card-stat p-3 text-white"
+                        style="background: linear-gradient(135deg,#f59e0b,#d97706);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="card-header">Total Kategori</div>
+                                <h3 class="mt-2">{{ $stats['total_kategori'] ?? 0 }}</h3>
+                            </div>
+                            <i class="bi bi-tags stat-icon"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 align-items-center">
+                    <div class="card card-stat p-3 text-white"
+                        style="background: linear-gradient(135deg,#22c55e,#16a34a);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="card-header">Kategori Aktif</div>
+                                <h3 class="mt-2">{{ $stats['kategori_aktif'] ?? 0 }}</h3>
+                            </div>
+                            <i class="bi bi-box-seam stat-icon"></i>
+                        </div>
+                    </div>
+                </div>  
+            </div>
+
             <!-- 🔷 KATEGORI -->
             <div class="card mb-4">
                 <div class="card-header bg-white d-flex justify-content-between">
@@ -170,6 +223,141 @@
                     </table>
                 </div>
             </div>
+
+            <!-- 🔷 Detail Inventaris -->
+            <div class="card mb-4">
+                <div class="card-header bg-white d-flex justify-content-between">
+                    <span><i class="bi bi-tags"></i> Detail Inventaris</span>
+
+                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#modalDetailInventaris">
+                        + Tambah
+                    </button>
+                </div>
+
+                <div class="card-body table-responsive">
+                    <table id="detailInventarisTable" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nama Inventaris</th>
+                                <th>Kode</th>
+                                <th>Nama Atribut</th>
+                                <th>Value</th>
+                                <th>
+                                    <>
+                                </th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($inventaris_detail as $d)
+                                <tr>
+                                    <td>{{ $d->inventaris_nama }}</td>
+                                    <td>{{ $d->inventaris_kode }}</td>
+                                    <td>{{ $d->detail_nama }}</td>
+                                    <td>{{ $d->detail_isi }}</td>
+                                    <td>
+                                        @if ($d->detail_foto)
+                                            <!-- Tombol lihat foto -->
+                                            <a href="{{ asset('asset/atribut_inventaris/' . $d->detail_foto) }}"
+                                                target="_blank" class="btn btn-sm btn-primary">
+                                                Lihat Foto
+                                            </a>
+                                        @else
+                                            .....
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <!-- Tombol edit -->
+                                        <button class="btn btn-sm btn-warning" onclick="editDetailInventaris(this)"
+                                            data-id="{{ $d->detail_id }}" data-nama="{{ $d->detail_nama }}"
+                                            data-isi="{{ $d->detail_isi }}"
+                                            data-inventaris="{{ $d->inventaris_id }}-{{ $d->inventaris_kode }}"
+                                            data-foto="{{ $d->detail_foto }}" data-bs-toggle="modal"
+                                            data-bs-target="#modalDetailInventaris">
+                                            Edit
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 🔷 MODAL DETAIL INVENTARIS -->
+    <div class="modal fade" id="modalDetailInventaris">
+        <div class="modal-dialog modal-dialog-centered">
+            <form method="POST" id="formDetailInventaris" action="/admin/atribut/inventaris/input"
+                enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="_method" id="methodFieldDetail" value="POST">
+
+                <div class="modal-content shadow-lg border-0 rounded-4">
+
+                    <!-- HEADER -->
+                    <div class="modal-header border-0 pb-0">
+                        <div>
+                            <h5 class="fw-bold mb-0" id="modalTitleDetail">Tambah Detail Inventaris</h5>
+                            <small class="text-muted">Kelola detail tambahan untuk inventaris</small>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- BODY -->
+                    <div class="modal-body pt-3">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label">Inventaris</label>
+                                <select name="detail_inventaris" id="selectInventaris" class="form-control">
+                                    <option value="">Pilih Inventaris...</option>
+                                    @foreach ($inventaris as $i)
+                                        <option value="{{ $i->inventaris_id }}-{{ $i->inventaris_kode }}">
+                                            {{ $i->inventaris_kode }} - {{ $i->inventaris_nama }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Nama Atribut</label>
+                                <select name="detail_nama" id="selectDetailNama" class="form-control">
+                                    <option value="">Pilih Atribut...</option>
+                                    <option value="Serial Number">Serial Number</option>
+                                    <option value="Warna">Warna</option>
+                                    <option value="Foto">Foto</option>
+                                    <option value="Berat">Berat</option>
+                                    <option value="Ukuran">Ukuran</option>
+                                    <option value="Aksesoris">Aksesoris</option>
+                                    <option value="Nomor Rangka">Nomor Rangka</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Isi</label>
+                                <input type="text" name="detail_isi" id="inputDetailIsi" class="form-control">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Foto</label>
+                                <input type="file" name="detail_foto" id="inputDetailFoto" class="form-control">
+                            </div>
+                            <div class="col-12">
+                                <div id="fotoPreview"></div>
+                                <small class="text-muted">* Jika ingin mengganti foto, upload file baru. Jika tidak,
+                                    biarkan kosong.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body pt-0">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary w-100">Simpan</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -207,7 +395,7 @@
                             <div class="col-12">
                                 <label class="form-label">Kode Register</label>
                                 <input type="text" class="form-control" name="jenis_inventaris_kode"
-                                    placeholder="00.00.00.000.0" id="inv_jenis">
+                                    placeholder="00.00.00.000.0" id="inv_kode_jenis">
                             </div>
                         </div>
                     </div>
@@ -365,6 +553,7 @@
         $(document).ready(function() {
             $('#inventarisTable').DataTable();
             $('#kategoriTable').DataTable();
+            $('#detailInventarisTable').DataTable();
         });
     </script>
     <script>
@@ -409,6 +598,42 @@
         });
     </script>
     <script>
+        function editDetailInventaris(btn) {
+            let data = $(btn).data();
+
+            $('#modalTitleDetail').text('Edit Detail Inventaris');
+            $('#formDetailInventaris').attr('action', '/admin/atribut/inventaris/update/' + data.id);
+            $('#methodFieldDetail').val('PUT');
+
+            // Pilih inventaris
+            $('#selectInventaris').val(data.inventaris);
+
+            // Nama & isi atribut
+            $('#selectDetailNama').val(data.nama);
+            $('#inputDetailIsi').val(data.isi);
+
+            // Foto preview
+            if (data.foto) {
+                let fotoPath = data.foto ? '/asset/atribut_inventaris/' + data.foto : null;
+                $('#fotoPreview').html('<img src="' + fotoPath + '" class="img-fluid mb-2" style="max-height:150px;">');
+            } else {
+                $('#fotoPreview').html('');
+            }
+
+            // Reset input file supaya user bisa pilih baru
+            $('#inputDetailFoto').val('');
+
+            // Tampilkan modal
+            $('#modalDetailInventaris').modal('show');
+        }
+
+        // Reset modal ketika ditutup
+        $('#modalDetailInventaris').on('hidden.bs.modal', function() {
+            $('#formDetailInventaris')[0].reset();
+            $('#fotoPreview').html('');
+        });
+    </script>
+    <script>
         $('#inv_kode').on('input', function() {
             let val = $(this).val().replace(/\D/g, ''); // ambil angka saja
 
@@ -429,7 +654,7 @@
         });
     </script>
     <script>
-        $('#inv_jenis').on('input', function() {
+        $('#inv_kode_jenis').on('input', function() {
             let val = $(this).val().replace(/\D/g, ''); // ambil angka saja
 
             let result = '';

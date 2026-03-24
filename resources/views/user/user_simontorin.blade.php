@@ -3,10 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Admin - SIMONTORIN</title>
+    <title>SIMONTORIN</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="icon" href="{{ asset('asset/image/pemprov.png') }}" type="image/png">
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -28,6 +30,34 @@
             font-size: 1rem;
         }
 
+        .role-badge {
+            border: none;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .role-badge:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(99, 102, 241, 0.4);
+        }
+
+        .navbar {
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
         .stat-icon {
             font-size: 2.5rem;
             opacity: 0.2;
@@ -44,18 +74,59 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm mb-4 py-3">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="#">SIMONTORIN Admin</a>
-            <div class="d-flex align-items-center">
-                <span class="me-3">Halo, {{ Auth::user()->name ?? 'Admin' }}</span>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
-                </form>
+            <a class="navbar-brand fw-bold">
+                <small class="text-muted ms-2">DASHBOARD SIMONTORIN</small> - {{ session('pegawai_nama') ?? 'Admin' }}
+            </a>
+
+            <div class="d-flex align-items-center gap-2">
+                <button class="role-badge" data-bs-toggle="modal" data-bs-target="#roleModal">
+                    <i class="bi bi-person-badge"></i>
+                    {{ session('active_role') }}
+                </button>
+
+                <a href="{{ route('logout') }}" class="btn btn-danger btn-sm">
+                    <i class="bi bi-box-arrow-right"></i>
+                </a>
             </div>
         </div>
     </nav>
+    <div class="modal fade" id="roleModal" tabindex="-1">
+        <div class="modal-dialog">
+            <form method="POST" action="/set-role">
+                @csrf
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Pilih Role</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <label class="form-label">Role yang tersedia</label>
+
+                        <select name="role" class="form-control" required>
+                            <option value="">-- Pilih Role --</option>
+
+                            @foreach ($roles as $role)
+                                <option value="{{ $role }}"
+                                    {{ session('active_role') == $role ? 'selected' : '' }}>
+                                    {{ ucfirst($role) }}
+                                </option>
+                            @endforeach
+
+                        </select>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Ganti Role</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
 
     <div class="container-fluid">
 
@@ -143,39 +214,8 @@
             </div>
         </div>
 
-        <!-- Tabel Perbaikan Aktif -->
-        <div class="card mb-4">
-            <div class="card-header bg-white">
-                <i class="bi bi-tools"></i> Perbaikan Aktif
-            </div>
-            <div class="card-body table-responsive">
-                <table class="table table-hover table-sm">
-                    <thead>
-                        <tr>
-                            <th>Barang</th>
-                            <th>Tanggal Masuk</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($activePerbaikan as $p)
-                            <tr>
-                                <td>{{ $p->inventaris->inventaris_nama ?? '-' }}</td>
-                                <td>{{ $p->perbaikan_tanggal_masuk }}</td>
-                                <td>{{ $p->perbaikan_status }}</td>
-                            </tr>
-                        @endforeach
-                        @if (count($activePerbaikan) == 0)
-                            <tr>
-                                <td colspan="3" class="text-center text-muted">Tidak ada perbaikan aktif</td>
-                            </tr>
-                        @endif
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

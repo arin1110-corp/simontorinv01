@@ -97,65 +97,7 @@
                 </div>
             </div>  
 
-            <!-- Tabel Inventaris Terbaru -->
-            <div class="card mb-4">
-                <div class="card-header bg-white">
-                    <i class="bi bi-box-seam"></i> Inventaris Terbaru
-                </div>
-                <div class="card-body table-responsive">
-                    <table id="inventarisTable" class="table table-hover table-sm">
-                        <thead>
-                            <tr>
-                                <th>Kode</th>
-                                <th>Nama</th>
-                                <th>Kondisi</th>
-                                <th>Status</th>
-                                <th>Tahun</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($latestInventaris as $inv)
-                                <tr>
-                                    <td>{{ $inv->inventaris_kode }}</td>
-                                    <td>{{ $inv->inventaris_nama }}</td>
-                                    <td>{{ $inv->inventaris_kondisi }}</td>
-                                    <td>{{ $inv->inventaris_status }}</td>
-                                    <td>{{ $inv->inventaris_tahun_perolehan ?? '-' }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Tabel Perbaikan Aktif -->
-            <div class="card mb-4">
-                <div class="card-header bg-white">
-                    <i class="bi bi-tools"></i> Perbaikan Aktif
-                </div>
-                <div class="card-body table-responsive">
-                    <table id="perbaikanTable" class="table table-hover table-sm">
-                        <thead>
-                            <tr>
-                                <th>Barang</th>
-                                <th>Tanggal Masuk</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($activePerbaikan as $p)
-                                <tr>
-                                    <td>{{ $p->inventaris->inventaris_nama ?? '-' }}</td>
-                                    <td>{{ $p->perbaikan_tanggal_masuk }}</td>
-                                    <td>{{ $p->perbaikan_status }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        </div>
+            
 
         <!-- Footer -->
         @include('admin.partials.footeradmin')

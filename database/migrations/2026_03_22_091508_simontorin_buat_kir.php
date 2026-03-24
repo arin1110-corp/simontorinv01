@@ -20,6 +20,7 @@ return new class extends Migration {
 
             $table->string('kir_kode', 50);
             $table->year('kir_tahun');
+            $table->string('kir_barcode', 50)->nullable();
 
             $table->timestamps();
         });

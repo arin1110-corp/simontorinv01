@@ -13,6 +13,7 @@ use App\Models\ModelUser;
 use App\Models\ModelLokasiRuangan;
 use App\Models\ModelJenisInventaris;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File; // pastikan ada use ini di atas
 
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
@@ -27,11 +28,14 @@ use Illuminate\Http\Request;
 class AdminController extends Controller
 {
     //
+
+    /* Dashboard */
     public function index()
     {
         $stats = [
             'inventaris' => ModelInventaris::count(),
             'perbaikan' => ModelPerbaikan::where('perbaikan_status', 'Proses')->count(),
+            'tersedia' => ModelInventaris::where('inventaris_status', 'Tersedia')->count(),
             'peminjaman' => ModelPeminjaman::where('peminjaman_status', 'Dipinjam')->count(),
             'booking' => ModelBookingRapat::count(),
         ];
@@ -41,20 +45,30 @@ class AdminController extends Controller
 
         return view('admin.admin_simontorin', compact('stats', 'latestInventaris', 'activePerbaikan'));
     }
+    /* End Dashboard */
+
+    /* Pengelolaan Inventaris Index */
+    /* Inventaris */
     public function inventarisIndex()
     {
         $stats = [
             'total' => ModelInventaris::count(),
             'aktif' => ModelInventaris::where('inventaris_status', 'Tersedia')->count(),
+            'tersedia' => ModelInventaris::where('inventaris_status', 'Tersedia')->count(),
             'perbaikan' => ModelInventaris::where('inventaris_status', 'Perbaikan')->count(),
             'dihapus' => ModelInventaris::where('inventaris_status', 'Dihapus')->count(),
+            'total_kategori' => ModelJenisInventaris::count(),
+            'kategori_aktif' => ModelJenisInventaris::where('jenis_inventaris_status', 'Aktif')->count(),
+            'total_atribut' => ModelAtribut::count(),
         ];
 
         $kategori = DB::table('simontorin_jenis_inventaris')->leftJoin('simontorin_inventaris', 'simontorin_jenis_inventaris.jenis_inventaris_id', '=', 'simontorin_inventaris.inventaris_jenis')->select('simontorin_jenis_inventaris.jenis_inventaris_id', 'simontorin_jenis_inventaris.jenis_inventaris_nama', 'simontorin_jenis_inventaris.jenis_inventaris_kode', 'simontorin_jenis_inventaris.jenis_inventaris_status', DB::raw('COUNT(simontorin_inventaris.inventaris_id) as total'))->groupBy('simontorin_jenis_inventaris.jenis_inventaris_id', 'simontorin_jenis_inventaris.jenis_inventaris_nama', 'simontorin_jenis_inventaris.jenis_inventaris_kode', 'simontorin_jenis_inventaris.jenis_inventaris_status')->get();
 
         $inventaris = DB::table('simontorin_inventaris')->leftJoin('simontorin_jenis_inventaris', 'simontorin_inventaris.inventaris_jenis', '=', 'simontorin_jenis_inventaris.jenis_inventaris_id')->select('simontorin_inventaris.inventaris_merk', 'simontorin_inventaris.inventaris_model', 'simontorin_inventaris.inventaris_kode', 'simontorin_inventaris.*', 'simontorin_jenis_inventaris.jenis_inventaris_nama', 'simontorin_inventaris.inventaris_status')->latest('simontorin_inventaris.created_at')->get();
 
-        return view('admin.admin_inventaris', compact('stats', 'kategori', 'inventaris'));
+        $inventaris_detail = DB::table('simontorin_inventaris')->join('simontorin_inventaris_detail', 'simontorin_inventaris.inventaris_id', '=', 'simontorin_inventaris_detail.detail_inventaris')->select('simontorin_inventaris_detail.*', 'simontorin_inventaris.inventaris_id', 'simontorin_inventaris.inventaris_nama', 'simontorin_inventaris.inventaris_kode', 'simontorin_inventaris_detail.detail_nama', 'simontorin_inventaris_detail.detail_isi')->get();
+
+        return view('admin.admin_inventaris', compact('stats', 'kategori', 'inventaris', 'inventaris_detail'));
     }
     public function inventarisUpdate(Request $request, $id)
     {
@@ -102,6 +116,8 @@ class AdminController extends Controller
 
         return redirect()->route('admin.inventaris.index')->with('success', 'Inventaris berhasil ditambahkan!');
     }
+    /* End Inventaris */
+    /* Jenis Inventaris */
     public function jenisInventarisInput(Request $request)
     {
         $request->validate([
@@ -127,6 +143,166 @@ class AdminController extends Controller
 
         return redirect()->route('admin.inventaris.index')->with('success', 'Kategori berhasil diperbarui!');
     }
+    /* End Jenis Inventaris */
+    /* Atribut Inventaris */
+    public function atributInventarisInput(Request $request)
+    {
+        $request->validate([
+            'detail_inventaris' => 'required',
+            'detail_nama' => 'required|string|max:255',
+            'detail_isi' => 'required|string',
+            'detail_foto' => 'nullable|image|max:2048',
+        ]);
+
+        $detail_inv_explode = explode('-', $request->detail_inventaris, 2);
+        $kode_inventaris = $detail_inv_explode[0];
+        $kode_register = $detail_inv_explode[1];
+
+        $detail = ModelAtribut::create([
+            'detail_inventaris' => $kode_inventaris, // pastikan ini sesuai dengan field di form
+            'detail_nama' => $request->detail_nama,
+            'detail_isi' => $request->detail_isi,
+        ]); // detail_id sudah ada di $detail->detail_id
+
+        if ($request->hasFile('detail_foto')) {
+            $foto = $request->file('detail_foto');
+
+            // Ambil kode register inventaris
+            $inventaris = $detail->inventaris; // pastikan relasi ModelAtribut -> Inventaris sudah ada
+            $kodeRegister = $kode_register ?? 'unknown';
+
+            // Replace karakter yang bisa bermasalah di filename
+
+            $filename = $request->detail_isi . '_' . $kode_register . '_' . time() . '.' . $foto->getClientOriginalExtension();
+
+            // Simpan di public/asset/atribut_inventaris
+            $foto->move(public_path('asset/atribut_inventaris'), $filename);
+
+            // Update path di DB
+            $detail->update([
+                'detail_foto' => $filename,
+            ]);
+        }
+
+        return redirect()->route('admin.inventaris.index')->with('success', 'Atribut berhasil ditambahkan!');
+    }
+    public function atributInventarisUpdate(Request $request, $id)
+    {
+        $detail = ModelAtribut::findOrFail($id);
+        $detail->update([
+            'detail_nama' => $request->detail_nama,
+            'detail_isi' => $request->detail_isi,
+        ]);
+
+        $detail_inv_explode = explode('-', $request->detail_inventaris, 2);
+        $kode_inventaris = $detail_inv_explode[0];
+        $kode_register = $detail_inv_explode[1];
+        if ($request->hasFile('detail_foto')) {
+            // Hapus file lama jika ada
+            if ($detail->detail_foto) {
+                $oldFile = public_path('asset/atribut_inventaris/' . $detail->detail_foto);
+                if (File::exists($oldFile)) {
+                    File::delete($oldFile);
+                }
+            }
+
+            // Upload file baru
+            $foto = $request->file('detail_foto');
+            $filename = $request->detail_isi . '_' . $kode_register . '_' . time() . '.' . $foto->getClientOriginalExtension();
+            $foto->move(public_path('asset/atribut_inventaris'), $filename);
+
+            // Update nama file di database
+            $detail->update(['detail_foto' => $filename]);
+        }
+        // Kalau tidak upload, foto lama tetap dipakai
+
+        return redirect()->route('admin.inventaris.index')->with('success', 'Atribut berhasil diperbarui!');
+    }
+    /* End Atribut Inventaris */
+    /* End Pengelolaan Inventaris Index */
+
+    /* Pengelolaan KIR Index */
+    /* Kartu Inventaris Ruangan (KIR) */
+    public function kirIndex()
+    {
+        $stats = [
+            'total_lokasi' => ModelLokasiRuangan::count(),
+            'lokasi_belum_kir' => DB::table('simontorin_kir')->whereNull('kir_lokasi')->count(),
+            'lokasi_sudah_kir' => DB::table('simontorin_kir')->whereNotNull('kir_lokasi')->count(),
+        ];
+
+        $lokasi = ModelLokasiRuangan::all();
+
+        $kir = ModelKir::all();
+
+        $detail_kir = ModelDetailKir::all();
+        return view('admin.admin_kir', compact('stats', 'lokasi', 'kir', 'detail_kir'));
+    }
+    // Lokasi
+    public function lokasiInput(Request $request)
+    {
+        $request->validate([
+            'lokasi_nama' => 'required|string|max:255',
+            'lokasi_keterangan' => 'nullable|string|max:255',
+        ]);
+
+        ModelLokasiRuangan::create([
+            'lokasi_nama' => $request->lokasi_nama,
+            'lokasi_keterangan' => $request->lokasi_keterangan,
+        ]);
+
+        return redirect()->route('admin.kir.index')->with('success', 'Lokasi berhasil ditambahkan!');
+    }
+    public function lokasiUpdate(Request $request, $id)
+    {
+        $request->validate([
+            'lokasi_nama' => 'required|string|max:255',
+            'lokasi_keterangan' => 'nullable|string|max:255',
+        ]);
+
+        $lokasi = ModelLokasiRuangan::findOrFail($id);
+        $lokasi->update([
+            'lokasi_nama' => $request->lokasi_nama,
+            'lokasi_keterangan' => $request->lokasi_keterangan,
+        ]);
+
+        return redirect()->route('admin.kir.index')->with('success', 'Lokasi berhasil diperbarui!');
+    }
+    /* End Kartu Inventaris Ruangan (KIR) */
+    /* End Pengelolaan KIR Index */
+
+    /* Pengelolaan Perbaikan Index */
+    public function perbaikanIndex()
+    {
+        $perbaikan = ModelPerbaikan::all();
+        return view('admin.admin_perbaikan', compact('perbaikan'));
+    }
+    /* End Pengelolaan Perbaikan Index */
+
+    /* Pengelolaan Booking Index */
+    public function bookingIndex()
+    {
+        $booking = ModelBookingRapat::all();
+        return view('admin.admin_booking_rapat', compact('booking'));
+    }
+    /* End Pengelolaan Booking Index */
+
+    /* Pengelolaan Peminjaman Index */
+    public function peminjamanIndex()
+    {
+        $peminjaman = ModelPeminjaman::all();
+        return view('admin.admin_peminjaman', compact('peminjaman'));
+    }
+    /* End Pengelolaan Peminjaman Index */
+
+    /* Pengelolaan Pengguna Index */
+    public function usersIndex()
+    {
+        $pengguna = ModelUser::all();
+        return view('admin.admin_pengguna', compact('pengguna'));
+    }
+
+    /* Barcode Inventaris */
     public function generateBarcode($id)
     {
         $inventaris = DB::table('simontorin_inventaris')->leftJoin('simontorin_jenis_inventaris', 'simontorin_inventaris.inventaris_jenis', '=', 'simontorin_jenis_inventaris.jenis_inventaris_id')->where('inventaris_id', $id)->first();

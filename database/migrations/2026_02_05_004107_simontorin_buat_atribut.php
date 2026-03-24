@@ -14,12 +14,13 @@ return new class extends Migration {
     {
         //
         Schema::create('simontorin_inventaris_detail', function (Blueprint $table) {
-            $table->id('inventaris_detail_id');
+            $table->id('detail_id');
 
-            $table->unsignedBigInteger('inventaris_detail_inventaris');
+            $table->unsignedBigInteger('detail_inventaris');
 
             $table->string('detail_nama');
             $table->text('detail_isi');
+            $table->text('detail_foto')->nullable();
 
             $table->timestamps();
         });

@@ -5,11 +5,10 @@
     <meta charset="UTF-8">
     <title>SIMONTORIN</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="icon" href="{{ asset('asset/image/pemprov.png') }}" type="image/png">
 
     <style>
         body {
@@ -90,9 +89,9 @@
 
             <hr>
 
-            <form method="POST" action="{{ route('login') }}">
+            <form method="POST" action="/login">
                 @csrf
-                <input name="login" class="form-control input-lg mb-3" placeholder="Email / Username">
+                <input name="nip" class="form-control input-lg mb-3" placeholder="Email / Username">
                 <input type="password" name="password" class="form-control input-lg mb-4" placeholder="Password">
                 <button class="btn btn-success w-100">Login</button>
             </form>

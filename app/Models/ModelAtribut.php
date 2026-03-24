@@ -10,10 +10,11 @@ class ModelAtribut extends Model
     use HasFactory;
 
     protected $table = 'simontorin_inventaris_detail';
-    protected $primaryKey = 'inventaris_detail_id';
+    protected $primaryKey = 'detail_id';
     protected $fillable = [
-        'inventaris_detail_inventaris',
+        'detail_inventaris',
         'detail_nama',
         'detail_isi',
+        'detail_foto',
     ];
 }

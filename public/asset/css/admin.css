@@ -1,25 +1,66 @@
-body {
-font-family: 'Segoe UI', sans-serif;
-background: #f4f6f9;
-margin: 0;
+html, body {
+height: 100%;
 }
 
-/* Sidebar */
 .sidebar {
-width: 260px;
-height: 100vh;
 position: fixed;
-background: #1e293b; /* navy gelap solid */
-color: #fff;
-padding-top: 30px;
-box-shadow: 5px 0 20px rgba(0,0,0,0.2); /* subtle depth */
+top: 0;
+left: 0;
+height: 100vh;
+width: 260px;
+background: #1e293b;
+overflow-y: auto;
+padding-bottom: 100px;
 }
 
+.content {
+margin-left: 260px;
+padding: 30px;
+}
 .sidebar .logo {
-display: flex;
-flex-direction: column;
-align-items: center;
-margin-bottom: 40px;
+position: sticky;
+top: 0;
+padding-top: 30px;
+background: rgb(21, 22, 68);
+z-index: 20; /* lebih tinggi */
+padding-bottom: 30px; /* ruang untuk selamat datang */
+color: #fff;
+text-align: center;
+}
+.sidebar .selamat-datang {
+font-size: 1rem;
+font-weight: 500;
+color: #fff;
+margin-bottom: 20px; /* lebih bawah dari logo */
+text-align: center; /* biar rata tengah */
+}
+
+/* ROLE BUTTON */
+.role {
+margin-top: 12px;
+}
+
+.ganti-role {
+border-radius: 10px;
+padding: 5px 14px;
+font-size: 15px;
+font-weight: 600;
+transition: all 0.25s ease;
+border: 1px solid rgba(255,255,255,0.2);
+background: transparent;
+color: #fff;
+}
+
+.ganti-role:hover {
+background: #0d6efd;
+border-color: #0d6efd;
+transform: translateY(-1px);
+box-shadow: 0 4px 10px rgba(13,110,253,0.3);
+}
+.sidebar .logo span {
+font-weight: 700;
+font-size: 1.5rem;
+color: #1d8445;
 }
 
 .sidebar .logo img {
@@ -55,6 +96,21 @@ font-size: 1.2rem;
 background: #334155; /* sedikit lebih terang */
 transform: translateX(8px) scale(1.02);
 box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.sidebar a.active {
+background: #334155;
+transform: translateX(5px);
+}
+/* biar smooth & bagus */
+.sidebar::-webkit-scrollbar {
+width: 6px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+background: #ccc;
+border-radius: 10px;
+}
+.sidebar::-webkit-scrollbar-thumb:hover {
+background: #999;
 }
 
 /* Content area */
@@ -95,20 +151,20 @@ opacity: 0.2;
 
 /* kategori card */
 .kategori-card {
-    padding: 20px;
-    border-radius: 15px;
-    background: #f8fafc;
-    text-align: center;
-    transition: 0.3s;
+padding: 20px;
+border-radius: 15px;
+background: #f8fafc;
+text-align: center;
+transition: 0.3s;
 }
 .kategori-card:hover {
-    transform: translateY(-5px);
+transform: translateY(-5px);
 }
 
 /* badge status */
 .badge-status {
-    padding: 6px 10px;
-    border-radius: 8px;
+padding: 6px 10px;
+border-radius: 8px;
 }
 
 .badge-aktif { background:#dcfce7; color:#16a34a; }
@@ -117,8 +173,8 @@ opacity: 0.2;
 
 /* table lebih clean */
 .table {
-    border-radius: 12px;
-    overflow: hidden;
+border-radius: 12px;
+overflow: hidden;
 }
 
 /* Table modern */

@@ -18,7 +18,7 @@ return new class extends Migration {
 
             $table->unsignedBigInteger('user_role_user'); // dari SADARIN
 
-            $table->enum('user_role_nama', ['admin', 'user'])->default('user');
+            $table->enum('user_role_nama', ['Admin', 'Pegawai'])->default('Pegawai');
 
             $table->timestamps();
         });
