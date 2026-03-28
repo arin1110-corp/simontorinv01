@@ -11,7 +11,7 @@ class ModelInventaris extends Model
 
     protected $table = 'simontorin_inventaris';
     protected $primaryKey = 'inventaris_id';
-    protected $fillable = ['inventaris_kode', 'inventaris_barcode', 'inventaris_nama', 'inventaris_merk', 'inventaris_model', 'inventaris_jenis', 'inventaris_tahun_perolehan', 'inventaris_asalusul', 'inventaris_keterangan', 'inventaris_kondisi', 'inventaris_status', 'inventaris_alasan_dihapus'];
+    protected $fillable = ['inventaris_kode', 'inventaris_barcode', 'inventaris_nama', 'inventaris_merk', 'inventaris_model', 'inventaris_kodeatas', 'inventaris_jenis', 'inventaris_tahun_perolehan', 'inventaris_asalusul', 'inventaris_keterangan', 'inventaris_kondisi', 'inventaris_status', 'inventaris_alasan_dihapus'];
 
     public function simontorin_jenis_inventaris()
     {

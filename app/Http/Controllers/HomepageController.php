@@ -13,6 +13,10 @@ use App\Models\ModelUser;
 use App\Models\ModelLokasiRuangan;
 use App\Models\ModelJenisInventaris;
 
+use App\Models\ModelKodeAtas;
+
+use Illuminate\Support\Facades\DB;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
@@ -98,5 +102,18 @@ class HomepageController extends Controller
         session(['active_role' => $request->role]);
 
         return redirect($request->role === 'Admin' ? '/admin' : '/user');
+    }
+    public function showInventaris($id)
+    {
+        $inventaris = DB::table('simontorin_inventaris')
+            ->leftJoin('simontorin_jenis_inventaris', 'simontorin_inventaris.inventaris_jenis', '=', 'simontorin_jenis_inventaris.jenis_inventaris_id')
+            ->where('inventaris_id', $id)
+            ->first();
+
+        if (!$inventaris) {
+            abort(404);
+        }
+
+        return view('home.cekinventaris', compact('inventaris'));
     }
 }

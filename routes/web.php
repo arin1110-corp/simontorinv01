@@ -7,10 +7,10 @@ use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
-    return view('home.simontorin');
+    return view('home.simontorin_2');
 });
 Route::get('/login', function () {
-    return view('home.simontorin');
+    return view('home.simontorin_2');
 })->name('login.form');
 
 Route::post('/login', [HomepageController::class, 'login'])->name('login.process');
@@ -18,7 +18,7 @@ Route::post('/set-role', [HomepageController::class, 'setRole'])->name('set.role
 Route::get('/logout', [HomepageController::class, 'logout'])->name('logout');
 
 // lihat detail saat scan
-Route::get('/inventaris/{id}', [HomepageController::class, 'show'])->name('inventaris.show');
+Route::get('/inventaris/{id}', [HomepageController::class, 'showInventaris'])->name('inventaris.show');
 
 Route::middleware(['role:Admin'])->group(function () {
     /*Admin Routes*/
@@ -30,6 +30,8 @@ Route::middleware(['role:Admin'])->group(function () {
     Route::put('/admin/inventaris/update/{id}', [AdminController::class, 'inventarisUpdate'])->name('admin.inventaris.update');
     // generate barcode
     Route::get('/admin/inventaris/barcode/{id}', [AdminController::class, 'generateBarcode'])->name('admin.inventaris.barcode');
+    Route::get('/admin/inventaris/generate-all', [AdminController::class, 'generateAllAndDownload'])->name('inventaris.generateAll');
+    Route::get('/admin/inventaris/unduhsemua/pdf', [AdminController::class, 'downloadAllPDF'])->name('inventaris.downloadAll');
     // download barcode
     Route::get('/admin/inventaris/barcode/download/{id}', [AdminController::class, 'downloadBarcode']);
     Route::get('/barcode/download/{id}', [AdminController::class, 'downloadPDF']);
@@ -39,6 +41,10 @@ Route::middleware(['role:Admin'])->group(function () {
     // Atribut Inventaris
     Route::post('/admin/atribut/inventaris/input', [AdminController::class, 'atributInventarisInput'])->name('admin.atribut.input');
     Route::put('/admin/atribut/inventaris/update/{id}', [AdminController::class, 'atributInventarisUpdate'])->name('admin.atribut.update');
+    // Kode Atas
+    Route::post('/admin/kode/atas/input', [AdminController::class, 'kodeAtasInput'])->name('admin.kode.input');
+    Route::put('/admin/kode/atas/update/{id}', [AdminController::class, 'kodeAtasUpdate'])->name('admin.kode.update');
+
     // KIR
     Route::get('/admin/kir', [AdminController::class, 'kirIndex'])->name('admin.kir.index');
     //Lokasi

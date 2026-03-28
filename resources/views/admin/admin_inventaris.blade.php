@@ -72,21 +72,30 @@
             </div>
             <!-- 🔷 TABEL INVENTARIS -->
             <div class="card mb-4">
-                <div class="card-header bg-white d-flex justify-content-between">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <span><i class="bi bi-box-seam"></i> Daftar Inventaris</span>
 
-                    <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalInventaris">
-                        + Tambah Inventaris
-                    </button>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalInventaris">
+                            + Tambah Inventaris
+                        </button>
+                        <a href="{{ route('inventaris.generateAll') }}" class="btn btn-primary btn-sm">
+                            <i class="bi bi-printer"></i> Generate Barcode All
+                        </a>
+                        <a href="{{ route('inventaris.downloadAll') }}?lebar=8" target="_blank" class="btn btn-warning btn-sm">
+    <i class="bi bi-download"></i> Download Barcode
+</a>
+                    </div>
                 </div>
 
                 <div class="card-body table-responsive">
                     <table id="inventarisTable" class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Kode</th>
+                                <th>Kode Atas</th>
+                                <th>Kode Register</th>
                                 <th>Nama Inventaris</th>
-                                <th>Kategori</th>
+                                <th>Kode Barang</th>
                                 <th>Kondisi</th>
                                 <th>Merk - Model</th>
                                 <th>Asal Usul</th>
@@ -99,6 +108,7 @@
                         <tbody>
                             @foreach ($inventaris as $i)
                                 <tr>
+                                    <td>{{ $i->kodeatas_isi }}</td>
                                     <td>{{ $i->inventaris_kode }}</td>
                                     <td>{{ $i->inventaris_nama }}</td>
                                     <td>{{ $i->jenis_inventaris_nama ?? '-' }}</td>
@@ -127,6 +137,7 @@
                                     <td>
                                         <button class="btn btn-primary btn-sm" onclick="editModeInv(this)"
                                             data-id="{{ $i->inventaris_id }}" data-nama="{{ $i->inventaris_nama }}"
+                                            data-kodeatas="{{ $i->inventaris_kodeatas }}"
                                             data-jenis="{{ $i->inventaris_jenis }}"
                                             data-tahun="{{ $i->inventaris_tahun_perolehan }}"
                                             data-kode="{{ $i->inventaris_kode }}"
@@ -174,7 +185,7 @@
                             <i class="bi bi-box-seam stat-icon"></i>
                         </div>
                     </div>
-                </div>  
+                </div>
             </div>
 
             <!-- 🔷 KATEGORI -->
@@ -191,9 +202,9 @@
                     <table id="kategoriTable" class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Nama Kategori</th>
+                                <th>Nama Jenis</th>
                                 <th>Total Inventaris</th>
-                                <th>Kode Register</th>
+                                <th>Kode Barang</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
@@ -284,6 +295,81 @@
                     </table>
                 </div>
             </div>
+
+            <!--Kode Atas-->
+            <div class="card mb-4">
+                <div class="card-header bg-white d-flex justify-content-between">
+                    <span><i class="bi bi-tags"></i> Kode Atas Inventaris</span>
+
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalKodeAtas">
+                        + Tambah
+                    </button>
+                </div>
+
+                <div class="card-body table-responsive">
+                    <table id="kodeAtasTable" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Kode Atas</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($kodeatas as $k)
+                                <tr>
+                                    <td>{{ $k->kodeatas_isi }}</td>
+                                    <td>
+                                        <!-- Tombol edit -->
+                                        <button class="btn btn-sm btn-warning" onclick="editKodeAtas(this)"
+                                            data-id="{{ $k->kodeatas_id }}" data-isi="{{ $k->kodeatas_isi }}"
+                                            data-bs-toggle="modal" data-bs-target="#modalKodeAtas">
+                                            Edit
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Kode Atas-->
+    <div class="modal fade" id="modalKodeAtas">
+        <div class="modal-dialog modal-dialog-centered">
+            <form method="POST" id="formKodeAtas" action="/admin/kode/atas/input" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="_method" id="methodFieldKodeAtas" value="POST">
+
+                <div class="modal-content shadow-lg border-0 rounded-4">
+
+                    <!-- HEADER -->
+                    <div class="modal-header border-0 pb-0">
+                        <div>
+                            <h5 class="fw-bold mb-0" id="modalTitleKodeAtas">Tambah Kode Atas Inventaris</h5>
+                            <small class="text-muted">Kelola kode atas inventaris</small>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- BODY -->
+                    <div class="modal-body pt-3">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label">Kode Atas</label>
+                                <input type="text" class="form-control" name="kodeatas_isi" id="inputKodeAtas">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FOOTER -->
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -344,7 +430,8 @@
                             </div>
                             <div class="col-12">
                                 <div id="fotoPreview"></div>
-                                <small class="text-muted">* Jika ingin mengganti foto, upload file baru. Jika tidak,
+                                <small class="text-muted">* Jika ingin mengganti foto, upload file baru. Jika
+                                    tidak,
                                     biarkan kosong.</small>
                             </div>
                         </div>
@@ -374,8 +461,9 @@
                     <!-- HEADER -->
                     <div class="modal-header border-0 pb-0">
                         <div>
-                            <h5 class="fw-bold mb-0" id="modalTitleKategori">Tambah Kategori</h5>
-                            <small class="text-muted">Kelola jenis inventaris untuk klasifikasi yang lebih baik</small>
+                            <h5 class="fw-bold mb-0" id="modalTitleKategori">Tambah Kode Barang</h5>
+                            <small class="text-muted">Kelola jenis inventaris untuk klasifikasi yang lebih
+                                baik</small>
                         </div>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
@@ -384,7 +472,7 @@
                     <div class="modal-body pt-3">
                         <div class="row g-3">
                             <div class="col-12">
-                                <label class="form-label">Nama Kategori</label>
+                                <label class="form-label">Nama Kode Barang</label>
                                 <input type="text" class="form-control" name="jenis_inventaris_nama"
                                     placeholder="Masukkan Nama Kategori">
                             </div>
@@ -393,9 +481,9 @@
                     <div class="modal-body pt-0">
                         <div class="row g-3">
                             <div class="col-12">
-                                <label class="form-label">Kode Register</label>
+                                <label class="form-label">Kode Barang</label>
                                 <input type="text" class="form-control" name="jenis_inventaris_kode"
-                                    placeholder="00.00.00.000.0" id="inv_kode_jenis">
+                                    id="inv_kode_jenis">
                             </div>
                         </div>
                     </div>
@@ -483,11 +571,22 @@
                                 </select>
                             </div>
 
+                            <!-- KODE ATAS -->
+                            <div class="col-md-6">
+                                <label class="form-label">Kode Atas</label>
+                                <select name="inventaris_kodeatas" id="inv_kodeatas" class="form-control">
+                                    @foreach ($kodeatas as $k)
+                                        <option value="{{ $k->kodeatas_id }}">
+                                            {{ $k->kodeatas_isi }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                             <!-- KODE REGISTER -->
                             <div class="col-md-6">
                                 <label class="form-label">Kode Register</label>
-                                <input type="text" name="inventaris_kode" id="inv_kode" class="form-control"
-                                    placeholder="00.00.00.1.11.11">
+                                <input type="text" name="inventaris_kode" id="inv_kode" class="form-control">
                             </div>
 
                             <!-- TAHUN -->
@@ -566,6 +665,7 @@
             $('#btnSubmit').text('Update');
 
             $('#inv_nama').val(data.nama);
+            $('#inv_kodeatas').val(data.kodeatas);
             $('#inv_jenis').val(data.jenis);
             $('#inv_tahun').val(data.tahun);
             $('#inv_kode').val(data.kode);
@@ -595,6 +695,20 @@
         }
         $('#modalKategori').on('hidden.bs.modal', function() {
             $(this).find('input[name="jenis_inventaris_nama"]').val('');
+        });
+
+        function editKodeAtas(btn) {
+            let data = $(btn).data();
+
+            $('#modalTitle').text('Edit Kode Atas Inventaris');
+            $('#modalKodeAtas form').attr('action', '/admin/kode/atas/update/' + data.id);
+            $('#modalKodeAtas input[name="_method"]').val('PUT');
+            $('#modalKodeAtas button[type="submit"]').text('Update');
+
+            $('#modalKodeAtas input[name="kodeatas_isi"]').val(data.isi);
+        }
+        $('#modalKodeAtas').on('hidden.bs.modal', function() {
+            $(this).find('input[name="kodeatas_isi"]').val('');
         });
     </script>
     <script>
@@ -638,7 +752,26 @@
             let val = $(this).val().replace(/\D/g, ''); // ambil angka saja
 
             let result = '';
-            let pattern = [2, 2, 2, 1, 2, 2]; // bisa kamu ubah nanti
+            let pattern = [6]; // bisa kamu ubah nanti
+
+            let index = 0;
+
+            pattern.forEach(len => {
+                if (val.length > index) {
+                    if (result !== '') result += '.';
+                    result += val.substr(index, len);
+                    index += len;
+                }
+            });
+
+            $(this).val(result);
+        });
+
+        $('#inputKodeAtas').on('input', function() {
+            let val = $(this).val().replace(/\D/g, ''); // ambil angka saja
+
+            let result = '';
+            let pattern = [2, 2, 2, 2, 2, 2, 2, 2]; // bisa kamu ubah nanti
 
             let index = 0;
 
@@ -658,7 +791,7 @@
             let val = $(this).val().replace(/\D/g, ''); // ambil angka saja
 
             let result = '';
-            let pattern = [2, 2, 2, 1, 2, 2]; // bisa kamu ubah nanti
+            let pattern = [1, 1, 1, 2, 3, 3, 3]; // bisa kamu ubah nanti
 
             let index = 0;
 

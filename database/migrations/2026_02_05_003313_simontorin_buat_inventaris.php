@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->string('inventaris_merk')->nullable();
             $table->string('inventaris_model')->nullable();
             $table->string('inventaris_jenis')->nullable();
+            $table->unsignedBigInteger('inventaris_kode_atas');
             $table->year('inventaris_tahun_perolehan')->nullable();
             $table->string('inventaris_asalusul')->nullable();
             $table->text('inventaris_keterangan')->nullable();
