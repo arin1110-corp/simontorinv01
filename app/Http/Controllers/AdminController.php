@@ -182,7 +182,6 @@ class AdminController extends Controller
         ]);
 
         if ($request->hasFile('detail_foto')) {
-
             $file = $request->file('detail_foto');
 
             $safeNama = Str::slug($request->detail_isi);
@@ -196,9 +195,9 @@ class AdminController extends Controller
             $image = $manager->read($file);
 
             $image = $image->scale(width: 800); // resize
-            $image = $image->toJpeg(70);        // compress
+            $image = $image->toJpeg(70); // compress
 
-            file_put_contents($path, $image);   // 🔥 simpan manual
+            file_put_contents($path, $image); // 🔥 simpan manual
 
             $detail->update([
                 'detail_foto' => $filename,
@@ -210,6 +209,7 @@ class AdminController extends Controller
     public function atributInventarisUpdate(Request $request, $id)
     {
         $detail = ModelAtribut::findOrFail($id);
+
         $detail->update([
             'detail_nama' => $request->detail_nama,
             'detail_isi' => $request->detail_isi,
@@ -218,8 +218,9 @@ class AdminController extends Controller
         $detail_inv_explode = explode('-', $request->detail_inventaris, 2);
         $kode_inventaris = $detail_inv_explode[0];
         $kode_register = $detail_inv_explode[1];
+
         if ($request->hasFile('detail_foto')) {
-            // Hapus file lama jika ada
+            // 🔥 hapus lama
             if ($detail->detail_foto) {
                 $oldFile = public_path('asset/atribut_inventaris/' . $detail->detail_foto);
                 if (File::exists($oldFile)) {
@@ -227,15 +228,27 @@ class AdminController extends Controller
                 }
             }
 
-            // Upload file baru
-            $foto = $request->file('detail_foto');
-            $filename = $request->detail_isi . '_' . $kode_register . '_' . time() . '.' . $foto->getClientOriginalExtension();
-            $foto->move(public_path('asset/atribut_inventaris'), $filename);
+            $file = $request->file('detail_foto');
 
-            // Update nama file di database
-            $detail->update(['detail_foto' => $filename]);
+            $safeNama = Str::slug($request->detail_isi);
+            $filename = $safeNama . '_' . $kode_register . '_' . time() . '.jpg';
+
+            $path = public_path('asset/atribut_inventaris/' . $filename);
+
+            // 🔥 INTERVENTION V3
+            $manager = new ImageManager(new Driver());
+
+            $image = $manager->read($file);
+
+            $image = $image->scale(width: 800); // resize
+            $image = $image->toJpeg(70); // compress
+
+            file_put_contents($path, $image); // simpan hasil compress
+
+            $detail->update([
+                'detail_foto' => $filename,
+            ]);
         }
-        // Kalau tidak upload, foto lama tetap dipakai
 
         return redirect()->route('admin.inventaris.index')->with('success', 'Atribut berhasil diperbarui!');
     }
