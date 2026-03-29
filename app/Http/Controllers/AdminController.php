@@ -184,25 +184,19 @@ class AdminController extends Controller
         if ($request->hasFile('detail_foto')) {
             $file = $request->file('detail_foto');
 
-            // amankan nama file
             $safeNama = Str::slug($request->detail_isi);
-
             $filename = $safeNama . '_' . $kode_register . '_' . time() . '.jpg';
 
-            // path simpan
             $path = public_path('asset/atribut_inventaris/' . $filename);
 
-            // 🔥 COMPRESS + RESIZE
-            $img = Image::make($file)
-                ->resize(800, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                })
-                ->encode('jpg', 70); // kualitas 70%
+            // 🔥 VERSI 3 (WAJIB BEGINI)
+            $manager = new ImageManager(new Driver());
 
-            $img->save($path);
+            $image = $manager->read($file);
 
-            // update DB
+            $image->scale(width: 800); // resize
+            $image->toJpeg(70)->save($path); // compress + save
+
             $detail->update([
                 'detail_foto' => $filename,
             ]);
