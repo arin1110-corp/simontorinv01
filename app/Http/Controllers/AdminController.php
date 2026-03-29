@@ -22,6 +22,9 @@ use Intervention\Image\Drivers\Gd\Driver;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
 
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Str;
+
 use Barryvdh\DomPDF\Facade\Pdf;
 
 use Endroid\QrCode\Builder\Builder;
@@ -165,7 +168,7 @@ class AdminController extends Controller
             'detail_inventaris' => 'required',
             'detail_nama' => 'required|string|max:255',
             'detail_isi' => 'required|string',
-            'detail_foto' => 'nullable|image|max:2048',
+            'detail_foto' => 'nullable|image|max:5120', // naikin jadi 5MB
         ]);
 
         $detail_inv_explode = explode('-', $request->detail_inventaris, 2);
@@ -173,26 +176,33 @@ class AdminController extends Controller
         $kode_register = $detail_inv_explode[1];
 
         $detail = ModelAtribut::create([
-            'detail_inventaris' => $kode_inventaris, // pastikan ini sesuai dengan field di form
+            'detail_inventaris' => $kode_inventaris,
             'detail_nama' => $request->detail_nama,
             'detail_isi' => $request->detail_isi,
-        ]); // detail_id sudah ada di $detail->detail_id
+        ]);
 
         if ($request->hasFile('detail_foto')) {
-            $foto = $request->file('detail_foto');
+            $file = $request->file('detail_foto');
 
-            // Ambil kode register inventaris
-            $inventaris = $detail->inventaris; // pastikan relasi ModelAtribut -> Inventaris sudah ada
-            $kodeRegister = $kode_register ?? 'unknown';
+            // amankan nama file
+            $safeNama = Str::slug($request->detail_isi);
 
-            // Replace karakter yang bisa bermasalah di filename
+            $filename = $safeNama . '_' . $kode_register . '_' . time() . '.jpg';
 
-            $filename = $request->detail_isi . '_' . $kode_register . '_' . time() . '.' . $foto->getClientOriginalExtension();
+            // path simpan
+            $path = public_path('asset/atribut_inventaris/' . $filename);
 
-            // Simpan di public/asset/atribut_inventaris
-            $foto->move(public_path('asset/atribut_inventaris'), $filename);
+            // 🔥 COMPRESS + RESIZE
+            $img = Image::make($file)
+                ->resize(800, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                })
+                ->encode('jpg', 70); // kualitas 70%
 
-            // Update path di DB
+            $img->save($path);
+
+            // update DB
             $detail->update([
                 'detail_foto' => $filename,
             ]);
