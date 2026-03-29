@@ -443,7 +443,8 @@
                                     <option value="">Pilih Atribut...</option>
                                     <option value="Serial Number">Serial Number</option>
                                     <option value="Warna">Warna</option>
-                                    <option value="Foto">Foto</option>
+                                    <option value="Foto Utama">Foto Utama</option>
+                                    <option value="Foto Lainnya">Foto Lainnya</option>
                                     <option value="Berat">Berat</option>
                                     <option value="Ukuran">Ukuran</option>
                                     <option value="Aksesoris">Aksesoris</option>
