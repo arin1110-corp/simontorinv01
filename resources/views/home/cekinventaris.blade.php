@@ -91,7 +91,7 @@
             <!-- NAMA -->
             <div class="title">{{ $inventaris->inventaris_nama ?? '-' }}</div>
             <div class="subtitle mb-3">
-                {{ $inventaris->jenis_inventaris_nama ?? '-' }}
+                {{ $inventaris->jenis_inventaris_kode ?? '' }}.{{ $inventaris->inventaris_kode ?? '' }}
             </div>
 
             <!-- STATUS -->
@@ -105,9 +105,9 @@
             <div class="section">
                 <div class="row">
                     <div class="col-6 mb-3">
-                        <div class="label">Kode</div>
+                        <div class="label">Asal Usul</div>
                         <div class="value">
-                            {{ $inventaris->jenis_inventaris_kode ?? '' }}.{{ $inventaris->inventaris_kode ?? '' }}
+                            {{ $inventaris->inventaris_asalusul ?? '' }}
                         </div>
                     </div>
 
