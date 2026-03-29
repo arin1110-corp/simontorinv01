@@ -706,7 +706,7 @@ class AdminController extends Controller
         set_time_limit(300);
 
         $folderPath = public_path('barcode');
-        $zipFileName = 'barcode_' . date('Ymd_His') . '.zip';
+        $zipFileName = 'barcode_simontorin_' . date('Ymd_His') . '.zip';
         $zipPath = storage_path('app/' . $zipFileName);
 
         // Cek folder ada atau tidak
