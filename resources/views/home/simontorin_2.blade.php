@@ -14,10 +14,22 @@
         body {
             background: linear-gradient(135deg, #eef2f7, #f1f5f9);
             font-family: 'Segoe UI', sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             min-height: 100vh;
+        }
+
+        /* wrapper biar vertical */
+        .page-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* footer style */
+        .footer-text {
+            font-size: 13px;
+            color: #64748b;
         }
 
         .main-card {
@@ -74,48 +86,42 @@
 </head>
 
 <body>
+    <div class="page-wrapper d-flex flex-column min-vh-100 justify-content-center align-items-center">
 
-    <div class="main-card text-center">
+        <div class="main-card text-center">
 
-        <img src="{{ asset('asset/image/pemprov.png') }}" class="logo">
+            <img src="{{ asset('asset/image/pemprov.png') }}" class="logo">
 
-        <h4 class="fw-bold title mb-1">SIMONTOR<span>IN</span></h4>
-        <small class="text-muted">Monitoring Inventaris Internal</small>
-        <br>
-        <small class="text-muted">Dinas Kebudayaan Provinsi Bali</small>
+            <h4 class="fw-bold title mb-1">SIMONTOR<span>IN</span></h4>
+            <small class="text-muted">Monitoring Inventaris Internal</small><br>
+            <small class="text-muted">Dinas Kebudayaan Provinsi Bali</small>
 
-        <hr>
+            <hr>
 
-        <!-- 🔐 LOGIN -->
-        <form method="POST" action="/login">
-            @csrf
-            <input name="nip" class="form-control mb-3" placeholder="Email / Username">
-            <input type="password" name="password" class="form-control mb-3" placeholder="Password">
+            <!-- 🔐 LOGIN -->
+            <form method="POST" action="/login">
+                @csrf
+                <input name="nip" class="form-control mb-3" placeholder="Email / Username">
+                <input type="password" name="password" class="form-control mb-3" placeholder="Password">
 
-            <button class="btn btn-success btn-main w-100">
-                <i class="bi bi-box-arrow-in-right"></i> Login
+                <button class="btn btn-success btn-main w-100">
+                    <i class="bi bi-box-arrow-in-right"></i> Login
+                </button>
+            </form>
+
+            <div class="divider">atau</div>
+
+            <!-- 📷 SCAN -->
+            <button class="btn btn-outline-primary btn-scan w-100" data-bs-toggle="modal" data-bs-target="#scanModal">
+                <i class="bi bi-upc-scan"></i> Scan QR
             </button>
-        </form>
 
-        <div class="divider">atau</div>
+            <!-- RESULT -->
+            <div id="resultBox" class="mt-4" style="display:none;"></div>
 
-        <!-- 🔍 SEARCH -->
-        <!-- <div class="input-group mb-3">
-            <input id="keyword" class="form-control" placeholder="Cari inventaris...">
-            <button onclick="searchData()" class="btn btn-success">
-                <i class="bi bi-search"></i>
-            </button>
-        </div> -->
+        </div>
 
-        <!-- 📷 SCAN -->
-        <button class="btn btn-outline-primary btn-scan w-100"
-            data-bs-toggle="modal" data-bs-target="#scanModal">
-            <i class="bi bi-upc-scan"></i> Scan QR
-        </button>
-
-        <!-- RESULT -->
-        <div id="resultBox" class="mt-4" style="display:none;"></div>
-
+        @include('home.partials.footer')
     </div>
 
     <!-- MODAL SCAN -->
@@ -174,9 +180,12 @@
 
             html5Qr = new Html5Qrcode("scanner");
 
-            html5Qr.start(
-                { facingMode: "environment" },
-                { fps: 10, qrbox: 250 },
+            html5Qr.start({
+                    facingMode: "environment"
+                }, {
+                    fps: 10,
+                    qrbox: 250
+                },
                 (text) => {
 
                     html5Qr.stop();
@@ -198,4 +207,5 @@
     </script>
 
 </body>
+
 </html>

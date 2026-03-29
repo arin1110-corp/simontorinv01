@@ -630,9 +630,9 @@ class AdminController extends Controller
             ModelInventaris::findOrFail($inventaris->inventaris_id)->update([
                 'inventaris_barcode' => $path,
             ]);
-
-            return back()->with('success', 'Barcode berhasil dibuat & disimpan');
         }
+
+        return back()->with('success', 'Barcode berhasil dibuat & disimpan');
     }
     public function downloadBarcode($id)
     {

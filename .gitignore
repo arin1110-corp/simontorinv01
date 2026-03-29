@@ -2,6 +2,7 @@
 /public/build
 /public/hot
 /public/storage
+/public/barcode
 /storage/*.key
 /vendor
 .env

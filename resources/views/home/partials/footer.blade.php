@@ -1,4 +1,6 @@
-<footer class="py-4 text-center text-white" style="background:#0d1b2a">
-    © {{ date('Y') }} Dinas Kebudayaan Provinsi Bali <br>
-    SIMONTORIN – Sistem Monitoring Aset Internal
-</footer>
+<!-- FOOTER -->
+        <div class="text-center mt-4" style="font-size:13px; color:#64748b;">
+           Dinas Kebudayaan Provinsi Bali  © {{ date('Y') }} SIMONTORIN • v{{ config('app.version') }}
+            <br>
+            Develop by <span style="color:#22c55e; font-weight:500;">ARIN</span>
+        </div>
