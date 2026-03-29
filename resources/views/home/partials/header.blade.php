@@ -1,0 +1,1 @@
+<link rel="icon" href="{{ asset('asset/image/pemprov.png') }}" type="image/png">

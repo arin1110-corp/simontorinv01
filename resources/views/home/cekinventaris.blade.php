@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    @include('home.partials.header')
 
     <style>
         body {
@@ -33,7 +34,7 @@
         }
 
         .subtitle {
-            font-size: 13px;
+            font-size: 15px;
             color: #64748b;
         }
 
