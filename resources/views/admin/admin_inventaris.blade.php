@@ -82,9 +82,11 @@
                         <a href="{{ route('inventaris.generateAll') }}" class="btn btn-primary btn-sm">
                             <i class="bi bi-printer"></i> Generate Barcode All
                         </a>
-                        <a href="{{ route('inventaris.downloadAll') }}?lebar=8" target="_blank" class="btn btn-warning btn-sm">
-    <i class="bi bi-download"></i> Download Barcode
-</a>
+                        <a href="{{ route('inventaris.downloadBarcodeZip') }}" class="btn btn-success btn-sm">
+                            <i class="bi bi-download"></i> Download Semua Barcode
+                        </a>
+
+                        <div id="progressText" class="mt-3 text-muted" style="font-size:13px;"></div>
                     </div>
                 </div>
 
@@ -332,12 +334,36 @@
                     </table>
                 </div>
             </div>
-            
-        <!-- Footer -->
-        @include('admin.partials.footeradmin')
+
+            <!-- Footer -->
+            @include('admin.partials.footeradmin')
         </div>
     </div>
-    
+
+    <!-- Modal Download Barcode -->
+    <div class="modal fade" id="modalDownload">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h6 class="modal-title">Download Barcode</h6>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body text-center">
+
+                    <p class="text-muted mb-3">
+                        Pilih batch (maksimal 50 data per file)
+                    </p>
+
+                    <div id="batchList"></div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 
     <!-- Modal Kode Atas-->
     <div class="modal fade" id="modalKodeAtas">

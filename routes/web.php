@@ -32,6 +32,7 @@ Route::middleware(['role:Admin'])->group(function () {
     Route::get('/admin/inventaris/barcode/{id}', [AdminController::class, 'generateBarcode'])->name('admin.inventaris.barcode');
     Route::get('/admin/inventaris/generate-all', [AdminController::class, 'generateAllAndDownload'])->name('inventaris.generateAll');
     Route::get('/admin/inventaris/unduhsemua/pdf', [AdminController::class, 'downloadAllPDF'])->name('inventaris.downloadAll');
+    Route::get('/admin/inventaris/download-barcode-zip', [AdminController::class, 'downloadBarcodeZip'])->name('inventaris.downloadBarcodeZip');
     // download barcode
     Route::get('/admin/inventaris/barcode/download/{id}', [AdminController::class, 'downloadBarcode']);
     Route::get('/barcode/download/{id}', [AdminController::class, 'downloadPDF']);

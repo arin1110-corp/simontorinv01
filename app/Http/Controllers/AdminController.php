@@ -77,7 +77,9 @@ class AdminController extends Controller
 
         $kodeatas = ModelKodeAtas::all();
 
-        return view('admin.admin_inventaris', compact('kodeatas', 'stats', 'kategori', 'inventaris', 'inventaris_detail'));
+        $total = DB::table('simontorin_inventaris')->whereNotNull('inventaris_barcode')->count();
+
+        return view('admin.admin_inventaris', compact('kodeatas', 'stats', 'kategori', 'inventaris', 'inventaris_detail', 'total'));
     }
     public function inventarisUpdate(Request $request, $id)
     {
@@ -667,16 +669,22 @@ class AdminController extends Controller
     }
     public function downloadAllPDF(Request $request)
     {
-        // Ambil semua inventaris yang punya barcode
-        $inventarisList = DB::table('simontorin_inventaris')
-            ->whereNotNull('inventaris_barcode')
-            ->get();
+        ini_set('memory_limit', '512M');
+        set_time_limit(300);
+
+        $batch = $request->batch ?? 1;
+        $limit = 50;
+
+        $offset = ($batch - 1) * $limit;
+
+        // Ambil data per batch
+        $inventarisList = DB::table('simontorin_inventaris')->whereNotNull('inventaris_barcode')->orderBy('inventaris_id')->offset($offset)->limit($limit)->get();
 
         if ($inventarisList->isEmpty()) {
-            return back()->with('error', 'Belum ada barcode yang dibuat');
+            return response()->json(['message' => 'Data habis'], 404);
         }
 
-        // Simpan path barcode ke array
+        // Mapping barcode
         $barcodes = $inventarisList->map(function ($inv) {
             return [
                 'nama' => $inv->inventaris_nama,
@@ -684,12 +692,46 @@ class AdminController extends Controller
             ];
         });
 
-        $lebar = $request->lebar ?? 8; // lebar default 8 cm
+        $lebar = $request->lebar ?? 8;
 
-        // Load view PDF
+        // Generate PDF
         $pdf = Pdf::loadView('pdf.barcode_all', compact('barcodes', 'lebar'));
 
-        // Stream PDF ke browser
-        return $pdf->stream('all_barcodes.pdf');
+        $fileName = 'barcode_batch_' . $batch . '.pdf';
+
+        return $pdf->download($fileName);
+    }
+    public function downloadBarcodeZip()
+    {
+        set_time_limit(300);
+
+        $folderPath = public_path('barcode');
+        $zipFileName = 'barcode_' . date('Ymd_His') . '.zip';
+        $zipPath = storage_path('app/' . $zipFileName);
+
+        // Cek folder ada atau tidak
+        if (!file_exists($folderPath)) {
+            return back()->with('error', 'Folder barcode tidak ditemukan');
+        }
+
+        $files = glob($folderPath . '/*');
+
+        if (empty($files)) {
+            return back()->with('error', 'Tidak ada file barcode');
+        }
+
+        $zip = new \ZipArchive();
+
+        if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
+            foreach ($files as $file) {
+                if (is_file($file)) {
+                    $zip->addFile($file, basename($file));
+                }
+            }
+
+            $zip->close();
+        }
+
+        return response()->download($zipPath)->deleteFileAfterSend(true);
     }
 }
