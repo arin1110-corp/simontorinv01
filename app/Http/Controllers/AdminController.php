@@ -182,6 +182,7 @@ class AdminController extends Controller
         ]);
 
         if ($request->hasFile('detail_foto')) {
+
             $file = $request->file('detail_foto');
 
             $safeNama = Str::slug($request->detail_isi);
@@ -189,13 +190,15 @@ class AdminController extends Controller
 
             $path = public_path('asset/atribut_inventaris/' . $filename);
 
-            // 🔥 VERSI 3 (WAJIB BEGINI)
             $manager = new ImageManager(new Driver());
 
+            // 🔥 WAJIB assign ulang tiap step
             $image = $manager->read($file);
 
-            $image->scale(width: 800); // resize
-            $image->toJpeg(70)->save($path); // compress + save
+            $image = $image->scale(width: 800); // resize
+            $image = $image->toJpeg(70);        // compress
+
+            file_put_contents($path, $image);   // 🔥 simpan manual
 
             $detail->update([
                 'detail_foto' => $filename,
