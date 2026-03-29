@@ -456,7 +456,8 @@
                             </div>
                             <div class="col-12">
                                 <label class="form-label">Foto</label>
-                                <input type="file" name="detail_foto" id="inputDetailFoto" class="form-control">
+                                <input type="file" name="detail_foto" id="inputDetailFoto" class="form-control"
+                                    accept="image/*" capture="environment">
                             </div>
                             <div class="col-12">
                                 <div id="fotoPreview"></div>
