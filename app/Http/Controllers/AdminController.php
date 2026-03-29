@@ -168,7 +168,7 @@ class AdminController extends Controller
             'detail_inventaris' => 'required',
             'detail_nama' => 'required|string|max:255',
             'detail_isi' => 'required|string',
-            'detail_foto' => 'nullable|image|max:5120', // naikin jadi 5MB
+            'detail_foto' => 'nullable|image', // naikin jadi 5MB
         ]);
 
         $detail_inv_explode = explode('-', $request->detail_inventaris, 2);
