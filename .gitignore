@@ -3,6 +3,7 @@
 /public/hot
 /public/storage
 /public/barcode
+/public/asset/atribut_inventaris
 /storage/*.key
 /vendor
 .env
