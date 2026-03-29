@@ -169,6 +169,9 @@
 
             <!-- 🔷 Detail KIR -->
             <div class="card mb-4" id="detailKir"></div>
+            
+        <!-- Footer -->
+        @include('admin.partials.footeradmin')
         </div>
     </div>
 

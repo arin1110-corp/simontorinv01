@@ -332,8 +332,12 @@
                     </table>
                 </div>
             </div>
+            
+        <!-- Footer -->
+        @include('admin.partials.footeradmin')
         </div>
     </div>
+    
 
     <!-- Modal Kode Atas-->
     <div class="modal fade" id="modalKodeAtas">

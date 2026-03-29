@@ -95,12 +95,13 @@
                         </div>
                     </div>
                 </div>
-            </div>  
+            </div>
 
-            
 
-        <!-- Footer -->
-        @include('admin.partials.footeradmin')
+
+            <!-- Footer -->
+            @include('admin.partials.footeradmin')
+        </div>
     </div>
 
     <!-- jQuery (wajib sebelum DataTables) -->
