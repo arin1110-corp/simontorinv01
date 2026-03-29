@@ -162,6 +162,7 @@
             </div>
 
         </div>
+        @include('home.partials.footer')
 
     </div>
 
