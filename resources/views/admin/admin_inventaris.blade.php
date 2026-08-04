@@ -5,6 +5,39 @@
     @include('admin.partials.headeradmin')
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .select2-container--default .select2-selection--single {
+            height: 48px;
+            border-radius: 12px;
+            border: 1px solid #dee2e6;
+            display: flex;
+            align-items: center;
+        }
+
+        .select2-container--default .select2-selection__rendered {
+            line-height: 46px !important;
+            padding-left: 15px;
+            font-size: 15px;
+        }
+
+        .select2-container--default .select2-selection__arrow {
+            height: 46px !important;
+            right: 10px;
+        }
+
+        .form-control {
+            border-radius: 12px;
+            height: 48px;
+            border: 1px solid #dee2e6;
+            transition: .2s;
+        }
+
+        .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 .15rem rgba(13, 110, 253, .15);
+        }
+    </style>
 </head>
 
 <body>
@@ -432,10 +465,12 @@
                                     <option value="">Pilih Inventaris...</option>
                                     @foreach ($inventaris as $i)
                                         <option value="{{ $i->inventaris_id }}-{{ $i->inventaris_kode }}">
-                                            {{ $i->inventaris_kode }} - {{ $i->inventaris_nama }}
+                                            {{ $i->inventaris_kode }} - {{ $i->inventaris_nama }} -
+                                            {{ $i->inventaris_merk }} - {{ $i->inventaris_model }}
                                         </option>
                                     @endforeach
                                 </select>
+
                             </div>
                             <div class="col-12">
                                 <label class="form-label">Nama Atribut</label>
@@ -679,6 +714,7 @@
 
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -848,6 +884,23 @@
 
             window.open(`/barcode/download/${id}?jumlah=${jumlah}&lebar=${lebar}`, '_blank');
         }
+        $('#modalDetailInventaris').on('shown.bs.modal', function() {
+
+            $('#selectInventaris').select2({
+                dropdownParent: $('#modalDetailInventaris'),
+                width: '100%',
+                placeholder: 'Pilih Inventaris...',
+                allowClear: true
+            });
+
+            $('#selectDetailNama').select2({
+                dropdownParent: $('#modalDetailInventaris'),
+                width: '100%',
+                placeholder: 'Pilih Atribut...',
+                allowClear: true
+            });
+
+        });
     </script>
 
 </body>
