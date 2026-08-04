@@ -111,7 +111,7 @@ class HomepageController extends Controller
             abort(404);
         }
 
-        $detail = DB::table('simontorin_detail_inventaris')->where('detail_inventaris', $id)->orderBy('detail_id')->get();
+        $detail = DB::table('simontorin_inventaris_detail')->where('detail_inventaris', $id)->orderBy('detail_id')->get();
 
         return view('home.cekinventaris', compact('inventaris', 'detail'));
     }
