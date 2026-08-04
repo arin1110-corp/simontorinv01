@@ -105,15 +105,14 @@ class HomepageController extends Controller
     }
     public function showInventaris($id)
     {
-        $inventaris = DB::table('simontorin_inventaris')
-            ->leftJoin('simontorin_jenis_inventaris', 'simontorin_inventaris.inventaris_jenis', '=', 'simontorin_jenis_inventaris.jenis_inventaris_id')
-            ->where('inventaris_id', $id)
-            ->first();
+        $inventaris = DB::table('simontorin_inventaris as i')->leftJoin('simontorin_jenis_inventaris as j', 'i.inventaris_jenis', '=', 'j.jenis_inventaris_id')->leftJoin('simontorin_kodeatas as k', 'i.inventaris_kodeatas', '=', 'k.kodeatas_id')->select('i.*', 'j.jenis_inventaris_nama', 'j.jenis_inventaris_kode', 'k.kodeatas_isi')->where('i.inventaris_id', $id)->first();
 
         if (!$inventaris) {
             abort(404);
         }
 
-        return view('home.cekinventaris', compact('inventaris'));
+        $detail = DB::table('simontorin_detail_inventaris')->where('detail_inventaris', $id)->orderBy('detail_id')->get();
+
+        return view('home.cekinventaris', compact('inventaris', 'detail'));
     }
 }
